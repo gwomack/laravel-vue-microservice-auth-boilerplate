@@ -11,6 +11,7 @@ use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Auth\Events\Failed;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Event;
+use App\Listeners\AuthEventSubscriber;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -20,6 +21,10 @@ class EventServiceProvider extends ServiceProvider
      * @var array<class-string, array<int, class-string>>
      */
     protected $listen = [];
+
+    protected $subscribe = [
+        AuthEventSubscriber::class,
+    ];
 
     /**
      * Register any events for your application.

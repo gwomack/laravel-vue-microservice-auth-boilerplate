@@ -10,6 +10,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
+use App\Services\RabbitMQService;
 
 class AuthenticationEvent implements ShouldQueue
 {
@@ -169,28 +170,8 @@ class AuthenticationEvent implements ShouldQueue
      */
     private function publishToExchange(string $exchange, string $routingKey, array $data): void
     {
-        $connection = new AMQPStreamConnection(
-            config('queue.connections.rabbitmq.hosts')[0]['host'],
-            config('queue.connections.rabbitmq.hosts')[0]['port'],
-            config('queue.connections.rabbitmq.hosts')[0]['user'],
-            config('queue.connections.rabbitmq.hosts')[0]['password']
-        );
-
-        $channel = $connection->channel();
-
-        // Declare exchange
-        $channel->exchange_declare($exchange, 'topic', false, true, false);
-
-        // Create and publish message
-        $msg = new AMQPMessage(
-            json_encode($data),
-            ['content_type' => 'application/json', 'delivery_mode' => AMQPMessage::DELIVERY_MODE_PERSISTENT]
-        );
-
-        $channel->basic_publish($msg, $exchange, $routingKey);
-
-        $channel->close();
-        $connection->close();
+        $rabbitmq = new RabbitMQService();
+        $rabbitmq->publishMessage($exchange, $routingKey, $data);
     }
 
     /**

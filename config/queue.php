@@ -74,7 +74,7 @@ return [
         'rabbitmq' => [
             'driver' => 'rabbitmq',
             'queue' => env('RABBITMQ_QUEUE', 'default'),
-            'connection' => PhpAmqpLib\Connection\AMQPLazyConnection::class,
+            'connection' => 'default',
 
             'hosts' => [
                 [
@@ -88,15 +88,21 @@ return [
 
             'options' => [
                 'ssl_options' => [
-                    'cafile' => env('RABBITMQ_SSL_CAFILE', null),
-                    'local_cert' => env('RABBITMQ_SSL_LOCALCERT', null),
-                    'local_key' => env('RABBITMQ_SSL_LOCALKEY', null),
-                    'verify_peer' => env('RABBITMQ_SSL_VERIFY_PEER', true),
-                    'passphrase' => env('RABBITMQ_SSL_PASSPHRASE', null),
+                    'verify_peer' => false,
+                ],
+                'queue' => [
+                    'exchange' => env('RABBITMQ_EXCHANGE_NAME', 'auth_exchange'),
+                    'exchange_type' => env('RABBITMQ_EXCHANGE_TYPE', 'topic'),
+                    'exchange_routing_key' => env('RABBITMQ_EXCHANGE_ROUTING_KEY', 'auth.#'),
+                    'prioritize_delayed_messages' => false,
+                    'queue_max_priority' => 10,
                 ],
             ],
 
-            'worker' => env('RABBITMQ_WORKER', 'default'),
+            'worker' => 'default',
+
+            'sleep_on_failure' => env('RABBITMQ_ERROR_SLEEP', 5),
+            'max_attempts' => env('RABBITMQ_MAX_ATTEMPTS', 3),
         ],
 
     ],
