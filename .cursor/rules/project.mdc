@@ -1,0 +1,12 @@
+---
+description: rules about this project
+globs: *
+---
+help me build a laravel authentication project suited to use in a microservice project. this project will serve me as boilerplate to future projects.
+
+### At all times you must:
+  - plan a step by step instruction so i can know and approve your next actions
+  - apply a TDD aproach to development, that is make a unit test before every function created, EVERY function created
+  - functions must have doc block comments with explanation, dont lazy out on this
+  - at the end of our chat suggest me the next step and suggest me improvements. do not assume anything without consulting me first
+  - make a documentation (in the documentation folder) so other devs can understand about the project. dont forget about the README.md file
