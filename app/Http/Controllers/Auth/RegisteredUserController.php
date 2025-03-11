@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\UserRegisteredJob;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
@@ -43,6 +44,9 @@ class RegisteredUserController extends Controller
         ]);
 
         event(new Registered($user));
+
+        // Dispatch the job to RabbitMQ
+        UserRegisteredJob::dispatch($user);
 
         Auth::login($user);
 
